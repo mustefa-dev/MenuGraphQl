@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
+
+builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
 
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
