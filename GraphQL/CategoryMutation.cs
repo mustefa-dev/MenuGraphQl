@@ -24,6 +24,8 @@ namespace MenuGraph.GraphQL
                 throw new ArgumentException($"Category with ID {id} not found.");
             }
             
+            existingCategory.Name = category.Name; // Update the name field
+            
             return await _categoryRepository.UpdateCategoryAsync(id, existingCategory);
         }
 

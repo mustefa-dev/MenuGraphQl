@@ -1,17 +1,18 @@
 using MenuGraph.Data;
 using MenuGraph.GraphQL;
+using MenuGraph.Models;
 using MenuGraph.Types;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
+    ServiceLifetime.Singleton);
+
+
 
 builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
-
-
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
@@ -27,7 +28,9 @@ var app = builder.Build();
 // Configure the app
 app.UseRouting();
 
-app.MapGraphQL("/graphql"); // Use top-level route registration
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGraphQL();
+});
 
 app.Run();
-

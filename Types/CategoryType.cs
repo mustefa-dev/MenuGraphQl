@@ -7,6 +7,5 @@ public class CategoryType : ObjectType<Category>
     {
         descriptor.Field(c => c.Id).Type<NonNullType<IdType>>();
         descriptor.Field(c => c.Name).Type<NonNullType<StringType>>();
-        // Add any other fields relevant to the Category entity
     }
 }
