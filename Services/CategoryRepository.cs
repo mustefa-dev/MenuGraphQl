@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MenuGraph.Data;
-using MenuGraph.Models;
 
 public interface ICategoryRepository
 {
@@ -13,6 +12,8 @@ public interface ICategoryRepository
     Task<Category> CreateCategoryAsync(Category category);
     Task<Category> UpdateCategoryAsync(Guid id, Category category);
     Task<bool> DeleteCategoryAsync(Guid id);
+    Task<bool> DeleteSectionsByCategoryIdAsync(Guid categoryId);
+    Task<bool> DeleteItemsBySectionIdAsync(Guid sectionId);
 }
 
 public class CategoryRepository : ICategoryRepository
@@ -35,15 +36,8 @@ public class CategoryRepository : ICategoryRepository
     public async Task<Category> GetCategoryAsync(Guid id)
     {
         var category = await _context.Categories.FindAsync(id);
-
-        if (category == null)
-        {
-            return null;
-        }
-
         return category;
     }
-
 
     public async Task<Category> CreateCategoryAsync(Category category)
     {
@@ -75,6 +69,32 @@ public class CategoryRepository : ICategoryRepository
         }
 
         _context.Categories.Remove(category);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteSectionsByCategoryIdAsync(Guid categoryId)
+    {
+        var sections = await _context.Sections.Where(s => s.CategoryId == categoryId).ToListAsync();
+        if (sections == null || sections.Count == 0)
+        {
+            return false;
+        }
+
+        _context.Sections.RemoveRange(sections);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteItemsBySectionIdAsync(Guid sectionId)
+    {
+        var items = await _context.Items.Where(i => i.SectionId == sectionId).ToListAsync();
+        if (items == null || items.Count == 0)
+        {
+            return false;
+        }
+
+        _context.Items.RemoveRange(items);
         await _context.SaveChangesAsync();
         return true;
     }

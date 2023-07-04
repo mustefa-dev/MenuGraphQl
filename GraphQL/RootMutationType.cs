@@ -1,6 +1,6 @@
-using MenuGraph.GraphQL;
+namespace MenuGraph.GraphQL;
 
-public class CategoryMutationType : ObjectType<CategoryMutation>
+public class RootMutationType : ObjectType<CategoryMutation>
 {
     protected override void Configure(IObjectTypeDescriptor<CategoryMutation> descriptor)
     {

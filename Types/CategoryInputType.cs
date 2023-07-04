@@ -1,5 +1,4 @@
 using HotChocolate.Types;
-using MenuGraph.Models;
 
 public class CategoryInputType : InputObjectType<Category>
 {

@@ -1,6 +1,5 @@
 using MenuGraph.Data;
 using MenuGraph.GraphQL;
-using MenuGraph.Models;
 using MenuGraph.Types;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,16 +10,20 @@ builder.Services.AddDbContext<DataContext>(options =>
     ServiceLifetime.Singleton);
 
 
-
-builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
+// Register repositories
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddGraphQLServer()
-    .AddQueryType<CategoryQueryType>()
-    .AddMutationType<CategoryMutationType>()
+    .AddQueryType<RootQueryType>()
+    .AddMutationType<RootMutationType>()
     .AddType<CategoryType>()
+    .AddType<SectionType>()
+    .AddType<ItemType>()
     .AddErrorFilter<GraphQLErrorFilter>(); // Register the custom error filter
 
 var app = builder.Build();

@@ -1,14 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using MenuGraph.Data;
 
-public class CategoryMutation
+public class RootMutation
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly ISectionRepository _sectionRepository;
     private readonly IItemRepository _itemRepository;
 
-    public CategoryMutation(ICategoryRepository categoryRepository, ISectionRepository sectionRepository, IItemRepository itemRepository)
+    public RootMutation(ICategoryRepository categoryRepository, ISectionRepository sectionRepository, IItemRepository itemRepository)
     {
         _categoryRepository = categoryRepository;
         _sectionRepository = sectionRepository;
@@ -27,36 +24,19 @@ public class CategoryMutation
         {
             throw new ArgumentException($"Category with ID {id} not found.");
         }
-        
+
         existingCategory.Name = category.Name; // Update the name field
-        
+
         return await _categoryRepository.UpdateCategoryAsync(id, existingCategory);
     }
 
     public async Task<bool> DeleteCategory(Guid id)
     {
-        var existingCategory = await _categoryRepository.GetCategoryAsync(id);
-        if (existingCategory == null)
-        {
-            throw new ArgumentException($"Category with ID {id} not found.");
-        }
-
-        // Delete associated sections and items
-        await _sectionRepository.DeleteItemsBySectionIdAsync(id);
-        await _itemRepository.DeleteItemsByCategoryIdAsync(id);
-
         return await _categoryRepository.DeleteCategoryAsync(id);
     }
 
-    public async Task<Section> CreateSection(Guid categoryId, Section section)
+    public async Task<Section> CreateSection(Section section)
     {
-        var category = await _categoryRepository.GetCategoryAsync(categoryId);
-        if (category == null)
-        {
-            throw new ArgumentException($"Category with ID {categoryId} not found.");
-        }
-
-        section.CategoryId = categoryId;
         return await _sectionRepository.CreateSectionAsync(section);
     }
 
@@ -78,15 +58,8 @@ public class CategoryMutation
         return await _sectionRepository.DeleteSectionAsync(id);
     }
 
-    public async Task<Item> CreateItem(Guid sectionId, Item item)
+    public async Task<Item> CreateItem(Item item)
     {
-        var section = await _sectionRepository.GetSectionAsync(sectionId);
-        if (section == null)
-        {
-            throw new ArgumentException($"Section with ID {sectionId} not found.");
-        }
-
-        item.SectionId = sectionId;
         return await _itemRepository.CreateItemAsync(item);
     }
 
