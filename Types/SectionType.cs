@@ -1,4 +1,4 @@
-using MenuGraph.Types;
+namespace MenuGraph.Types;
 
 public class SectionType : ObjectType<Section>
 {

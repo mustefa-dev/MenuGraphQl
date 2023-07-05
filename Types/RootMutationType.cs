@@ -1,4 +1,6 @@
-using MenuGraph.Types;
+using MenuGraph.GraphQL;
+
+namespace MenuGraph.Types;
 
 public class RootMutationType : ObjectType<RootMutation>
 {

@@ -1,4 +1,4 @@
-using HotChocolate.Types;
+namespace MenuGraph.Types;
 
 public class CategoryInputType : InputObjectType<Category>
 {

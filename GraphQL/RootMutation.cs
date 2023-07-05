@@ -1,4 +1,6 @@
 
+namespace MenuGraph.GraphQL;
+
 public class RootMutation
 {
     private readonly ICategoryRepository _categoryRepository;
